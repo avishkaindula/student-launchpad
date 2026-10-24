@@ -84,13 +84,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
         return;
       }
 
-      const { access_token, refresh_token } = params;
-      if (!access_token || !refresh_token) return; // an ordinary deep link, nothing to do
+      // Only accept a PKCE `code`. Never sign in with raw tokens from a URL: anyone can
+      // send a link, and tokens in it would log the user into the sender's account.
+      const { code } = params;
+      if (!code) return; // an ordinary deep link, nothing to do
 
       setIsHandlingLink(true);
-      const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+      // Fails unless this app requested the email (it stored the matching code verifier).
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
       setIsHandlingLink(false);
-      if (error) showAlert('Could not sign you in', error.message);
+      if (error) {
+        showAlert(
+          'Could not sign you in',
+          'Open the link on the same device and app where you requested it, or request a new one.'
+        );
+      }
     };
 
     Linking.getInitialURL().then(handleUrl);
@@ -153,9 +161,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
 }
 
 /**
- * Supabase email links come back with the session tokens after the "#", for example
- *   myapp://reset-password#access_token=...&refresh_token=...&type=recovery
- * If the link has expired, they carry `error_description` instead.
+ * With PKCE, Supabase email links come back with a one-time code, for example
+ *   myapp://reset-password?code=...
+ * If the link has expired, they carry `error_description` instead (sometimes after the "#").
  */
 function getUrlParams(url: string): Record<string, string> {
   const [beforeHash, hash = ''] = url.split('#');

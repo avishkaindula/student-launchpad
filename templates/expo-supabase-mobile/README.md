@@ -168,6 +168,12 @@ Emails from Supabase Auth contain a link that should open your app again. The ap
 
 So when testing password reset or magic links **in Expo Go on a real phone**, start the dev server with `npx expo start --tunnel` (you may be asked to log in to a free Expo account). Sign-up confirmation links still confirm the account either way; if the page after clicking does not load, go back to the app and sign in.
 
+**Open each link on the same device (and in the same app) that requested it.** The app uses
+Supabase's PKCE flow: the link carries a one-time `code` that only works together with a secret
+the app saved when it sent the email. That's a security feature — it stops someone from sending
+you a crafted link that signs you into *their* account — so a link opened on another phone or
+browser shows "Could not sign you in". Request a new one from the device you're using.
+
 ---
 
 ## Common pitfalls

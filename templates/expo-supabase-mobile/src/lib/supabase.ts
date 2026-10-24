@@ -26,6 +26,10 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
     storage: isWeb ? undefined : AsyncStorage,
     autoRefreshToken: true,
     persistSession: true,
+    // PKCE: email links carry a one-time `code` that only works in the app that asked for
+    // the email (it holds a matching secret). Without it, anyone could craft a link that
+    // signs the user into a different account.
+    flowType: 'pkce',
     // On web, supabase-js reads tokens from the URL after an email link is opened.
     // On iOS/Android the app does this itself (see src/context/auth.tsx).
     detectSessionInUrl: isWeb,
