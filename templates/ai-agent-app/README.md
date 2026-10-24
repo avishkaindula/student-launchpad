@@ -84,6 +84,17 @@ for embeddings + a vector store (e.g. Supabase `pgvector`) and keep the tool's i
 Push to GitHub → import on [vercel.com/new](https://vercel.com/new). On Vercel the AI Gateway
 authenticates automatically (OIDC), so you don't need to paste the key into project settings.
 
+### ⚠️ Before you deploy publicly
+
+`/api/chat` and `/api/brief` spend **your** AI credits on every request. The template already
+rejects oversized input (`lib/chat/limits.ts`) and stops the agent when the user disconnects —
+but anyone who finds your URL can still call it. Before sharing a public link:
+
+1. **Require sign-in** — e.g. combine with the [`nextjs-supabase-saas`](../nextjs-supabase-saas) template and check the user in the route handler.
+2. **Rate-limit** — add a rate-limit rule for `/api/*` in your host's firewall (e.g. Vercel Firewall), or use a library such as `@upstash/ratelimit`.
+3. **Cap spend** — set a budget/spend limit on your AI Gateway or provider account so a bug or abuse can't drain it.
+4. **Keep the demo key separate** — use a dedicated key for public demos and revoke it after the event.
+
 ## Good habits baked in (and worth keeping)
 
 - **Never trust the model with irreversible actions.** Payments, deletes and emails should be a button the user clicks (or a tool with approval), not something the model triggers alone.
