@@ -1,0 +1,36 @@
+[project]
+name = "fastapi-ml-service"
+version = "0.1.0"
+description = "Starter template: train a scikit-learn model, serve it with FastAPI, test it, ship it."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.162.0",
+    "joblib>=1.6.0",
+    "pandas>=3.1.0",
+    "pydantic>=2.14.1",
+    "pydantic-settings>=2.16.1",
+    "scikit-learn>=1.9.1",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "fastapi-cli>=0.0.32", # provides `fastapi dev` (auto-reload server for local work)
+    "httpx2>=2.16.0",      # used by FastAPI's TestClient (successor of httpx)
+    "pytest>=9.1.1",
+    "ruff>=0.17.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+# E/W: style, F: real bugs (unused imports, undefined names), I: import order,
+# B: common gotchas, UP: modern Python syntax, SIM: simplifications.
+select = ["E", "W", "F", "I", "B", "UP", "SIM"]

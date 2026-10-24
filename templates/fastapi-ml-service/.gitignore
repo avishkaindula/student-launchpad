@@ -1,0 +1,26 @@
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Secrets and local config (commit .env.example instead)
+.env
+
+# Trained model binaries: rebuild them with `uv run python -m training.train`.
+# models/metadata.json is small text, so commit it as a record of what you trained.
+models/*.joblib
+models/*.pkl
+
+# Raw or private data: share it through Drive/OneDrive, not git.
+# Small, cleaned sample files can live in data/ and be committed.
+data/raw/
+
+# Notebooks: checkpoints are noise
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

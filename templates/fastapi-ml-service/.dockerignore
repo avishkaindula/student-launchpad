@@ -1,0 +1,18 @@
+# Keep the build context small and avoid copying local junk into the image.
+.venv
+**/__pycache__
+.pytest_cache
+.ruff_cache
+.ipynb_checkpoints
+.git
+.env
+
+# The image trains its own model at build time.
+models/*.joblib
+models/metadata.json
+
+data/raw
+notebooks
+tests
+Dockerfile
+.dockerignore
